@@ -13,8 +13,11 @@ Redis Cluster Control 줄여서 rcctl
 ### 설치
 
 ```bash
-git clone https://github.com/your/repo.git
+# 레포에서 소스코드 다운
+git clone https://github.com/juseungl/REDIS_CLUSTER_CLI.git
 cd REDIS_CLUSTER_CLI
+# 만약 logs 디렉토리가 root 디렉토리에 없다면
+mkdir logs
 
 # 가상환경 생성 및 활성화
 python3 -m venv venv

@@ -65,7 +65,11 @@ done
 
 # rcctl : Redis Cluster Control Tool 사용법
 
-### help
+Redis 노드 간 통신 중 네트워크 오류가 발생할 수 있으므로, 실패 시 해당 명령어를 다시 실행해 주세요. !!!
+
+---
+
+## help
 사용법 안내를 출력합니다.
 ```bash
 ./rcctl help

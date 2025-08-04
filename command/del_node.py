@@ -7,8 +7,8 @@ from utils.redis_utils import RedisUtils
 def del_node(access_node, node_id_to_remove, password):
     """
     클러스터에서 특정 노드를 삭제하는 메인 함수
-    - access_node: 클러스터에 속한 임의 노드 (ip:port)
-    - node_id_to_remove: 삭제할 노드의 cluster node ID
+    - access_node: 클러스터에 접속하기 위한 임의 노드 (ip:port)
+    - node_id_to_remove: 삭제할 node's ID
     - password: Redis 인증 비밀번호
     """
     host, port = StringUtils.parse_node(access_node)

@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+from subcommand_handler import subcommand_handler
+
+if __name__ == "__main__":
+    subcommand_handler()
+
+"""
+    [Tool Name] 'r'edis 'C'luster 'C'on'T'ro'L' → rcctl
+
+    !/usr/bin/env python3 이거 포함해야
+    chmod +x rcctl로 실행 권한을 부여 후
+    ./rcctl --password lineplus help처럼 스크립트처럼 직접 실행 가능
+"""

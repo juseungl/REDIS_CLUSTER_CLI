@@ -1,0 +1,54 @@
+from redis.cluster import RedisCluster
+import sys
+
+def parse_host_port(addr):
+    try:
+        host, port = addr.split(":")
+        return host, int(port)
+    except Exception:
+        print(f"잘못된 ip:port 형식입니다: {addr}")
+        sys.exit(1)
+
+def populate_test_data(node_addr, password, num_keys=100000):
+    if num_keys < 1 or num_keys > 10_000_000:
+        print("❌ --num-of-keys 값은 1 이상 10,000,000 이하만 가능합니다.")
+        sys.exit(1)
+
+    host, port = parse_host_port(node_addr)
+    print(f"🔍 {node_addr} 클러스터에 연결 중...")
+
+    try:
+        r = RedisCluster(
+            host=host,
+            port=port,
+            password=password,
+            decode_responses=True,
+            skip_full_coverage_check=True,
+        )
+        r.ping()
+    except Exception as e:
+        print(f"❌ 클러스터 연결 실패: {e}")
+        sys.exit(1)
+
+    print(f"⏳ 총 {num_keys:,} 개의 더미 string 키-값을 생성합니다...")
+
+    batch_size = 1000
+    pipe = r.pipeline()
+
+    for i in range(1, num_keys + 1):
+        key = f"key:{i:010d}"
+        val = f"val:{i:010d}"
+        pipe.set(key, val)
+
+        if i % batch_size == 0:
+            try:
+                pipe.execute()
+                print(f" - {i:,} 개 저장 완료")
+            except Exception as e:
+                print(f"⚠️ 에러 발생 (batch {i - batch_size + 1}~{i}): {e}")
+                pipe.reset()
+
+    if num_keys % batch_size != 0:
+        pipe.execute()
+
+    print(f"🎉 더미 데이터 생성 완료! 총 {num_keys:,} 개 키가 저장되었습니다.")

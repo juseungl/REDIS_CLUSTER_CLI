@@ -17,6 +17,9 @@ class PrintUtils:
         port = node.connection_pool.connection_kwargs["port"]
         return f"{host}:{port}"
 
+
+
+
     @staticmethod
     def info(msg): print(f"🔍 {msg}")
     @staticmethod
@@ -27,3 +30,5 @@ class PrintUtils:
     def warn(msg): print(f"⚠️ {msg}")
     @staticmethod
     def error(msg): print(f"❌ {msg}")
+    @staticmethod
+    def transition(msg): print(f"🔁 {msg}")

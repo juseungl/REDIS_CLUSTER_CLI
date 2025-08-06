@@ -3,8 +3,8 @@ import sys
 from utils.print_utils import PrintUtils
 
 class RedisUtils:
-    CLUSTER_MEET = "CLUSTER MEET"
     TOTAL_SLOTS = 16384  # Redis 클러스터에서 사용할 수 있는 총 슬롯 개수
+    CLUSTER_MEET = "CLUSTER MEET"
     CLUSTER_MYID = "CLUSTER MYID"
     CLUSTER_REPLICATE = "CLUSTER REPLICATE"
     CLUSTER_ADDSLOTS = "CLUSTER ADDSLOTS"
@@ -105,9 +105,6 @@ class RedisUtils:
 
     @staticmethod
     def force_failover(conn):
-        """
-        해당 Redis 노드에서 강제로 FAILOVER 수행
-        """
         try:
             return conn.execute_command('CLUSTER', 'FAILOVER', 'FORCE')
         except Exception as e:

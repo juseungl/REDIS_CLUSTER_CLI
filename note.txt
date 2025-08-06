@@ -11,6 +11,15 @@ for port in {9001..9008}; do
   redis-server config/redis-${port}.conf &
 done
 
+redis-server config/redis-9001.conf &
+redis-server config/redis-9002.conf &
+redis-server config/redis-9003.conf &
+redis-server config/redis-9004.conf &
+redis-server config/redis-9005.conf &
+redis-server config/redis-9006.conf &
+redis-server config/redis-9007.conf &
+redis-server config/redis-9008.conf &
+
 for port in {9001..9008}; do
   redis-cli -p ${port} -a lineplus shutdown
 done
@@ -27,10 +36,10 @@ ps aux | grep redis
 ./rcctl --password lineplus populate-test-data --num-of-keys 100000 127.0.0.1:9001
 
 ./rcctl --password lineplus add-node 127.0.0.1:9007 127.0.0.1:9001
-./rcctl --password lineplus add-node --master-id 80533f3b4a0b33be6d01dba6cf29d8989e437b31 127.0.0.1:9008 127.0.0.1:9001
+./rcctl --password lineplus add-node --master-id a1bda750280ad02962a832322f1347713bf4c26e 127.0.0.1:9008 127.0.0.1:9001
 
-./rcctl --password lineplus reshard --from f478ca5eb20ac24cf5997c23bc8f78687ac8d7ba --to 80533f3b4a0b33be6d01dba6cf29d8989e437b31 --slots 1000 --pipeline 20 127.0.0.1:9001
-./rcctl --password lineplus reshard --from 80533f3b4a0b33be6d01dba6cf29d8989e437b31 --to f478ca5eb20ac24cf5997c23bc8f78687ac8d7ba --slots 1000 --pipeline 20 127.0.0.1:9001
+./rcctl --password lineplus reshard --from b5496a5c9dfdcd9b4a752a59b0178165015f2dc9 --to a1bda750280ad02962a832322f1347713bf4c26e --slots 1000 --pipeline 20 127.0.0.1:9001
+./rcctl --password lineplus reshard --from a1bda750280ad02962a832322f1347713bf4c26e --to b5496a5c9dfdcd9b4a752a59b0178165015f2dc9 --slots 1000 --pipeline 20 127.0.0.1:9001
 
 
 ./rcctl --password lineplus del-node 127.0.0.1:9001 8aef223249448e3fae177d4e1c91260c168081e9

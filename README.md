@@ -16,6 +16,7 @@ Redis Cluster Control 줄여서 rcctl
 # 레포에서 소스코드 다운
 git clone https://github.com/juseungl/REDIS_CLUSTER_CLI.git
 cd REDIS_CLUSTER_CLI
+
 # 만약 logs 디렉토리가 root 디렉토리에 없다면
 mkdir logs
 
@@ -23,26 +24,50 @@ mkdir logs
 python3 -m venv venv
 source venv/bin/activate
 
-deactivate venv
-
 # 패키지 설치
 pip install -r requirements.txt
+
+# 필요에 따라 가상환경 비활성화
+deactivate venv
 ```
 
 ### Redis 노드 실행
 ```bash
 # 각 포트에 맞는 redis 설정파일을 기반으로 Redis 노드 실행
+redis-server config/redis-9001.conf &
+redis-server config/redis-9002.conf &
+redis-server config/redis-9003.conf &
+redis-server config/redis-9004.conf &
+redis-server config/redis-9005.conf &
+redis-server config/redis-9006.conf &
+redis-server config/redis-9007.conf &
+redis-server config/redis-9008.conf &
+# 또는
 for port in {9001..9008}; do
   redis-server config/redis-${port}.conf &
 done
-
-# 정상적으로 켜졌는지 확인
+#------------------------------------------------
+# 정상적으로 켜졌는지 확인 후
 ps aux | grep redis
 
-# 종료 시
+# 실행되지 않은 레디스 노드가 있다면?
+# 아래 커맨드로 모드 종료 후
 for port in {9001..9008}; do
   redis-cli -p ${port} -a lineplus shutdown
 done
+# 또는
+redis-cli -p 9001 -a lineplus shutdown
+redis-cli -p 9002 -a lineplus shutdown
+redis-cli -p 9003 -a lineplus shutdown
+redis-cli -p 9004 -a lineplus shutdown
+redis-cli -p 9005 -a lineplus shutdown
+redis-cli -p 9006 -a lineplus shutdown
+redis-cli -p 9007 -a lineplus shutdown
+redis-cli -p 9008 -a lineplus shutdown
+# root에 생기는 appendonlydir 파일을 전부 지우고 
+# logs 하위 파일을 모두 제거 후 (디렉토리 자체는 유지) 
+# 위의 커맨드로 다시 레디스 서버 재실행
+#------------------------------------------------
 ```
 <br>
 
@@ -92,7 +117,7 @@ Redis 클러스터를 생성합니다.
   127.0.0.1:9001 127.0.0.1:9002 127.0.0.1:9003 \
   127.0.0.1:9004 127.0.0.1:9005 127.0.0.1:9006
 ```
-<img src="image-8.png" alt="alt text" width="600"/>
+<img src="images/image-8.png" alt="alt text" width="600"/>
 
 #### 1. 노드 연결 및 클러스터 토폴로지 구성
 - 지정된 노드 리스트를 바탕으로 각 노드에 Redis 연결 생성
@@ -130,7 +155,7 @@ Redis 클러스터에
 ./rcctl --password lineplus add-node 127.0.0.1:9007 127.0.0.1:9001
 ./rcctl --password lineplus add-node --master-id 80533f3b4a0b33be6d01dba6cf29d8989e437b31 127.0.0.1:9008 127.0.0.1:9001
 ```
-<img src="image-1.png" alt="alt text" width="1000"/>
+<img src="images/image-1.png" alt="alt text" width="1000"/>
 
 #### 1. 노드 연결 및 검증
 - 새로 추가할 노드와 기존 클러스터 노드에 Redis 연결 생성
@@ -166,7 +191,7 @@ Redis 클러스터의 슬롯을 재분배합니다.
 ./rcctl --password lineplus reshard --from f478ca5eb20ac24cf5997c23bc8f78687ac8d7ba --to 80533f3b4a0b33be6d01dba6cf29d8989e437b31 --slots 1000 --pipeline 20 127.0.0.1:9001
 ./rcctl --password lineplus reshard --from 80533f3b4a0b33be6d01dba6cf29d8989e437b31 --to f478ca5eb20ac24cf5997c23bc8f78687ac8d7ba --slots 1000 --pipeline 20 127.0.0.1:9001
 ```
-<img src="image-3.png" alt="alt text" width="1000"/>
+<img src="images/image-3.png" alt="alt text" width="1000"/>
 
 #### 1. 노드 연결 및 검증
 - 접근 노드를 통해 클러스터 연결 및 노드 정보 조회
@@ -203,7 +228,7 @@ Redis 클러스터에서 노드를 삭제합니다.
 ./rcctl --password lineplus del-node 127.0.0.1:9001 8aef223249448e3fae177d4e1c91260c168081e9
 ```
 
-<img src="image-4.png" alt="alt text" width="800"/>
+<img src="images/image-4.png" alt="alt text" width="800"/>
 
 #### 1. 클러스터 연결 및 노드 검증
 - 접근 노드를 통해 클러스터에 연결
@@ -238,8 +263,8 @@ Redis 클러스터에서 노드를 삭제합니다.
 # 예시
  ./rcctl --password lineplus check 127.0.0.1:9001
 ```
-<img src="image-6.png" alt="alt text" width="600"/>
-<img src="image-7.png" alt="alt text" width="600"/>
+<img src="images/image-6.png" alt="alt text" width="600"/>
+<img src="images/image-7.png" alt="alt text" width="600"/>
 
 #### 1. Redis 연결 및 클러스터 노드 정보 수집
 - connect_base_node(): 기준 노드(ip:port)에 접속하여 Redis 객체 생성
@@ -279,7 +304,7 @@ Redis 클러스터에 테스트용 더미 데이터를 생성합니다.
 # 예시
 ./rcctl --password lineplus populate-test-data --num-of-keys 100000 127.0.0.1:9001
 ```
-<img src="image-2.png" alt="alt text" width="1000"/>
+<img src="images/image-2.png" alt="alt text" width="1000"/>
 
 #### 1. 키 개수 검증
 - 입력된 키 개수가 1 이상 10,000,000 이하인지 검증 (요구사항 근거)

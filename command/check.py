@@ -206,9 +206,10 @@ def print_summary(slot_check, connected_check, cluster_consistency, r):
     print(f" - 슬롯 커버리지: {'✅ 정상' if slot_check else '⚠️ 누락 있음'}")
     print(f" - 노드 연결 상태: {'✅ 모두 연결됨' if connected_check else '❌ 연결 끊긴 노드 있음'}")
     print(f" - CLUSTER NODES 일치성: {'✅ 일치함' if cluster_consistency else '❌ 불일치함'}")
-    print("\n🧾클러스터에 포함된 노드 정보 출력)")
-    pprint.pprint(RedisUtils.cluster_nodes(r))
-    if connected_check and cluster_consistency:
+    if slot_check and connected_check and cluster_consistency:
         print("\n🎉 클러스터 상태는 정상입니다.")
     else:
         print("\n⚠️ 클러스터에 이상이 있습니다. 조치가 필요합니다.")
+    
+    print("\n🧾클러스터에 포함된 노드 정보 출력)")
+    pprint.pprint(RedisUtils.cluster_nodes(r))

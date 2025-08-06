@@ -23,7 +23,9 @@ def del_node(access_node, node_id_to_remove, password):
 
 
 def get_cluster_nodes(connection):
-    """클러스터 내 모든 노드 정보 조회"""
+    """
+    클러스터 내 모든 노드 정보 조회
+    """
     try:
         return RedisUtils.cluster_nodes(connection)
     except redis.exceptions.RedisError as e:
@@ -32,7 +34,9 @@ def get_cluster_nodes(connection):
 
 
 def validate_node_exists(nodes_dict, node_id):
-    """삭제할 노드가 클러스터에 존재하는지 확인"""
+    """
+    삭제할 노드가 클러스터에 존재하는지 확인
+    """
     if not any(info['node_id'] == node_id for info in nodes_dict.values()):
         PrintUtils.error(f"삭제할 노드 ID {node_id}가 클러스터에 없습니다.\n")
         sys.exit(1)
@@ -40,7 +44,9 @@ def validate_node_exists(nodes_dict, node_id):
 
 
 def get_remove_target_node_connection(password, nodes_dict, node_id):
-    """삭제 대상 노드의 Redis 연결과 주소 반환"""
+    """
+    삭제 대상 노드의 Redis 연결과 주소 반환
+    """
     for addr, info in nodes_dict.items():
         if info['node_id'] == node_id:
             host, port = StringUtils.parse_node(addr)

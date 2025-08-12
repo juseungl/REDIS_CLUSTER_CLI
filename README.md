@@ -27,6 +27,9 @@ source venv/bin/activate
 # 패키지 설치
 pip install -r requirements.txt
 
+# 권한 부여
+chmod +x rcctl
+
 # 필요에 따라 가상환경 비활성화
 deactivate venv
 ```
